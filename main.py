@@ -1,4 +1,4 @@
-from detector import Detector
+from paquetes.detector import Detector
 
 h_matriz = ["TTTTCA", "GATTCA", "CAACAT", "GAGCTA", "ATTGCG", "CTGTTC"]
 v_matriz = ["AGATCA", "GATTCA", "CAATAT", "GAGTTA", "ATTGCG", "CTGTTC"]
