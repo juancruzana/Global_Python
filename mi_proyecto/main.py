@@ -1,18 +1,20 @@
-#  - clases.py donde se declaren la clase "Detector", "Mutador", "Radiacion", "Virus" y "Sanador".
-
-# bases nitrogenadas: Adenina (A), Timina (T), Citosina (C) y Guanina (G)
-
+#Clase Detector
 class Detector:
     def __init__(self, matriz):
         self.matriz = matriz
 
     def detectar_mutantes(self):
-        if self.detector_horizontal():
-            return 'Tienes una mutación en horizontal'
-        elif self.detector_vertial():
-            return 'Tienes una mutación en vertical'
-        elif self.detector_diagonal():
-            return 'Tienes una mutación en diagonal'
+            mensajes = []  
+
+            if self.detector_horizontal():
+                mensajes.append('Tienes una mutación horizontal.')
+            if self.detector_vertial():
+                mensajes.append('Tienes una mutación vertical.')
+            if self.detector_diagonal():
+                mensajes.append('Tienes una mutación diagonal.')
+            
+            return '\n'.join(mensajes) if mensajes else 'No hay mutaciones detectadas.'
+        
 
     def detector_vertial(self):
         for col in range(6):
@@ -29,6 +31,7 @@ class Detector:
         # Si no encuentra secuencia de 4 consecutivos iguales en ninguna columna, retorna False
         return False
     
+
     def detector_horizontal(self):
         for fila in self.matriz:
             contador = 1  # Cuenta de caracteres consecutivos
@@ -42,6 +45,7 @@ class Detector:
         # Si no encuentra secuencia de 4 consecutivos iguales en las filas, retorna False
         return False
     
+
     def detector_diagonal(self):
         matriz = self.matriz
         
@@ -65,9 +69,12 @@ class Detector:
 h_matriz = ["TTTTCA", "GATTCA", "CAACAT", "GAGCTA", "ATTGCG", "CTGTTC"]
 v_matriz = ["AGATCA", "GATTCA", "CAATAT", "GAGTTA", "ATTGCG", "CTGTTC"]
 d_matriz = ["TGATCA", "GTTTCA", "CATCAT", "GAGTTA", "ATTGCG", "CTGTTC"]
+matriz = ["TTTTCA", "TTTTCA", "TATCAT", "TAGTTA", "ATTGCG", "CTGTTC"]
 
 horizontal = Detector(h_matriz)
 vertical = Detector(v_matriz)
 diagonal = Detector(d_matriz)
+matriz = Detector(matriz)
 
-diagonal.detectar_mutantes()
+resultado = diagonal.detectar_mutantes()
+print(resultado)
