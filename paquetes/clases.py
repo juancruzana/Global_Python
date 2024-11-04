@@ -1,24 +1,18 @@
-#Clase Detector
-'''
-ToDo: Agregar un atributo pertinente más a la clase.
-'''
 class Detector:
     def __init__(self, matriz):
         self.matriz = matriz
 
     def detectar_mutantes(self):
-            mensajes = []  
 
-            if self.detector_horizontal():
-                mensajes.append('Tienes una mutación horizontal.')
-            if self.detector_vertial():
-                mensajes.append('Tienes una mutación vertical.')
-            if self.detector_diagonal():
-                mensajes.append('Tienes una mutación diagonal.')
-            
-            return '\n'.join(mensajes) if mensajes else 'No hay mutaciones detectadas.'
-        
-
+        mensajes = []  # Almacena mensaje según posicion de mutación
+        if self.detector_horizontal():
+            mensajes.append('Tienes una mutación horizontal.')
+        if self.detector_vertial():
+            mensajes.append('Tienes una mutación vertical.')
+        if self.detector_diagonal():
+            mensajes.append('Tienes una mutación diagonal.')    
+        return mensajes != [], '\n'.join(mensajes) if mensajes else 'No hay mutaciones detectadas.'  
+    
     def detector_vertial(self):
         for col in range(6):
             contador = 1  # Cuenta de caracteres consecutivos
@@ -34,7 +28,6 @@ class Detector:
         # Si no encuentra secuencia de 4 consecutivos iguales en ninguna columna, retorna False
         return False
     
-
     def detector_horizontal(self):
         for fila in self.matriz:
             contador = 1  # Cuenta de caracteres consecutivos
@@ -48,7 +41,6 @@ class Detector:
         # Si no encuentra secuencia de 4 consecutivos iguales en las filas, retorna False
         return False
     
-
     def detector_diagonal(self):
         matriz = self.matriz
         
@@ -68,4 +60,36 @@ class Detector:
                 if (matriz[i][j] == matriz[i+1][j-1] == matriz[i+2][j-2] == matriz[i+3][j-3]):
                     return True
         return False
+
+   
+class Mutador(): 
+    def __init__(self,base_nitrogrnada):
+        self.base_nitrogenada = base_nitrogrnada 
+
+    def crear_mutante(self): 
+        pass
     
+
+class Radiacion(Mutador):  
+    def __init__(self, base_nitrogrnada):
+        super().__init__(base_nitrogrnada) 
+    
+    def crear_mutante(self,posicion_inicial,orientacion):
+        pass
+
+
+class Virus(Mutador):
+    
+    def __init__(self, base_nitrogrnada):
+        super().__init__(base_nitrogrnada) 
+    
+    def crear_mutante(self,posicion_inicial):
+        pass
+
+
+class Sanador(Detector): 
+    def __init__(self, lista_adn):
+        super().__init__(lista_adn)
+    
+    def sanar_mutantes(self): 
+        pass
