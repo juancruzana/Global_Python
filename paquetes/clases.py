@@ -81,11 +81,11 @@ class Radiacion(Mutador):
     def crear_mutante(self): 
         
         if self.forma == 'h': 
-            self.adn[self.posicion_inicial] = (self.base_nitrogenada * self.cantidad) + (self.adn[self.posicion_inicial][self.cantidad:]) # Agrega base nitrogenada en la posicioón seleccionada sin modificar la otra parte del ADN
+            self.adn[self.posicion_inicial] = (self.base_nitrogenada * self.cantidad) + (self.adn[self.posicion_inicial][self.cantidad:]) # Agrega base nitrogenada en la posicion seleccionada
             return print(self.adn)
 
         if self.forma == 'v':
-            for x in range(self.cantidad): # Según cantidad se muta de forma vertical
+            for x in range(self.cantidad):
                 self.adn[x] = self.adn[x][:self.posicion_inicial] + self.base_nitrogenada + self.adn[x][self.posicion_inicial+1:] # Replaza fila por fila en la columna seleccionada
             return print(self.adn)
 
@@ -96,9 +96,19 @@ class Virus(Mutador):
     
     def crear_mutante(self):
         if self.forma == 'd':
-            for x in range(self.cantidad):
-                self.adn[x] = self.adn[x][:x] + self.base_nitrogenada + self.adn[x][x:] # Agrega base nitrogenada desde la forma [0][0] hasta la cantidad asignada
-            return print(self.adn)
+
+            # Mutar de izquierda a derecha
+            fila = self.posicion_inicial[0]
+            col = self.posicion_inicial[1]
+            for i in range(4):
+                self.adn[fila] = self.adn[fila][:col] + self.base_nitrogenada + self.adn[fila][col+1:] # Agrega base nitrogenada desde la forma [0][0] 
+                fila += 1
+                col += 1
+            return [print(self.adn[x]) for x in range(len(self.adn))]
+
+            # Mutar de derecha a izquierda
+
+
 
 
 class Sanador(Detector): 
