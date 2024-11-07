@@ -63,51 +63,54 @@ class Detector:
 
    
 class Mutador(): 
-    def __init__(self, adn, base_nitrogenada, forma, posicion_inicial, cantidad):
+    def __init__(self, adn, base_nitrogenada, forma, posicion_inicial):
         self.adn = adn
         self.base_nitrogenada = base_nitrogenada.upper() # De que tipo de base nitrogenada será la mutación
         self.forma = forma.lower() # Forma en la q se mutará v,(vertica), h(horizontal), d (diagonal)
         self.posicion_inicial = posicion_inicial # Posición de la mutación en el adn
-        self.cantidad = cantidad # Si la mutación será de 4,5 o 6 bases nitrogenadas
 
     def crear_mutante(self): 
         pass
 
 
 class Radiacion(Mutador):  
-    def __init__(self, adn, base_nitrogenada, forma, posicion_inicial, cantidad):
-        super().__init__(adn, base_nitrogenada, forma, posicion_inicial, cantidad) 
+    def __init__(self, adn, base_nitrogenada, forma, posicion_inicial):
+        super().__init__(adn, base_nitrogenada, forma, posicion_inicial) 
     
     def crear_mutante(self): 
         
         if self.forma == 'h': 
-            self.adn[self.posicion_inicial] = (self.base_nitrogenada * self.cantidad) + (self.adn[self.posicion_inicial][self.cantidad:]) # Agrega base nitrogenada en la posicion seleccionada
+            self.adn[self.posicion_inicial] = (self.base_nitrogenada * 4) + (self.adn[self.posicion_inicial][4:]) # Agrega base nitrogenada en la posicion seleccionada
             return print(self.adn)
 
         if self.forma == 'v':
-            for x in range(self.cantidad):
+            for x in range(4):
                 self.adn[x] = self.adn[x][:self.posicion_inicial] + self.base_nitrogenada + self.adn[x][self.posicion_inicial+1:] # Replaza fila por fila en la columna seleccionada
             return print(self.adn)
 
 
 class Virus(Mutador):
-    def __init__(self, adn, base_nitrogenada, forma, posicion_inicial, cantidad):
-        super().__init__(adn, base_nitrogenada, forma, posicion_inicial, cantidad)
+    def __init__(self, adn, base_nitrogenada, forma, posicion_inicial):
+        super().__init__(adn, base_nitrogenada, forma, posicion_inicial)
     
     def crear_mutante(self):
         if self.forma == 'd':
-
-            # Mutar de izquierda a derecha
             fila = self.posicion_inicial[0]
             col = self.posicion_inicial[1]
-            for i in range(4):
-                self.adn[fila] = self.adn[fila][:col] + self.base_nitrogenada + self.adn[fila][col+1:] # Agrega base nitrogenada desde la forma [0][0] 
-                fila += 1
-                col += 1
-            return [print(self.adn[x]) for x in range(len(self.adn))]
 
-            # Mutar de derecha a izquierda
-
+            if self.posicion_inicial[1] < 3: # Mutar de izquierda a derecha
+                for i in range(4):
+                    self.adn[fila] = self.adn[fila][:col] + self.base_nitrogenada + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
+                    fila += 1
+                    col += 1
+                return [print(self.adn[x]) for x in range(len(self.adn))]
+            
+            else: # Mutar de derecha a izquierda
+                for i in range(4):
+                    self.adn[fila] = self.adn[fila][:col] + self.base_nitrogenada + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
+                    fila += 1
+                    col -= 1
+                return [print(self.adn[x]) for x in range(len(self.adn))]
 
 
 
