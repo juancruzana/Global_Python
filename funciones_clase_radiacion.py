@@ -1,7 +1,7 @@
 
 from funciones_clase_detector import *
-import random
 
+#Funcion para que ele ususario ingrese una orientacion 
 def ingresar_orientacion_de_mutacion(): 
     lista_orientaciones = ["h","v"]
     
@@ -19,10 +19,11 @@ def ingresar_orientacion_de_mutacion():
             print("- Valor incorrecto.\n  ")
           
     return orientacion
-    
+
+#funcion para que el usuario ingrese la base nitrogenada.    
 def ingresar_base_nitrogenada():
     
-    lista_bases = ["a","t","g","c"]
+    lista_bases = ["a","t","g","c","adenina","tinina","guanina","citocina"]
     
     while True: 
         try: 
@@ -36,8 +37,10 @@ def ingresar_base_nitrogenada():
                 print("""ERROR
                     - Valor incorrecto.\n """)
     return base_ingresada            
-    
+
+#funcion que retorna la poscicion de y(columna), elegida por el usuario   
 def conseguir_y(horizontal): 
+    #mientras no se ingrese una posicion valida el bucle se repetira
     while True: 
         posicion_y = int(input("Posicion y: ")) 
         if posicion_y >= 1 and posicion_y <= 6: 
@@ -55,25 +58,30 @@ def conseguir_y(horizontal):
         
     return posicion_y
 
+#funcion que retorna la poscicion de x(fila), elegida por el usuario
 def conseguir_x(horizontal):
     
     while True: 
-        posicion_x = int(input("Posicion X: ")) 
-        if posicion_x >= 1 and posicion_x <= 6: 
-            if not horizontal: 
-                if posicion_x <= 2: 
+        try: 
+            posicion_x = int(input("Posicion X: ")) 
+            if posicion_x >= 1 and posicion_x <= 6: 
+                if horizontal: 
                     break
                 else: 
-                    print("ERROR")
-                    print("-Posicion inválida para crear mutante Vertical\n")
+                    if posicion_x <= 2: 
+                        break
+                    else: 
+                        print("ERROR")
+                        print("-Posicion inválida para crear mutante Vertical\n")
             else: 
-                break
-        else: 
+                print("ERROR")
+                print("- Posicion Inválida.\n")
+        except: 
             print("ERROR")
-            print("- Posicion Inválida.\n")
-        
+            print("-Valor Inválido")
     return posicion_x
-             
+
+#funcion que devuelve los dos valores conseguidos en las anteriores funciones(x,y)             
 def ingresar_posicion_inicial(horizontal):
     while True: 
         try: 
@@ -90,10 +98,11 @@ def ingresar_posicion_inicial(horizontal):
         except: 
             print("Error")
             print("- Ingrese valor válido")
-            
+    #devuelve una tupla         
     return (posicion_x,posicion_y)
             
-
+#funcion para ingresar la cantidad de bases nitrgenadas que se van a inyectar.
+#contiene manejo de  errores 
 def ingresar_cantidad(posicion_inicial,es_horizontal,base): 
     
     if es_horizontal : 
@@ -120,8 +129,9 @@ def ingresar_cantidad(posicion_inicial,es_horizontal,base):
             print("Ingrese un valor correcto(1/6)\n")
             
     return cantidad
-        
-def crear_mutacion_horizontal(posicion_inicial,adn,base,cantidad): 
+
+#esta funcion es para crear y devolver la matriz de adn con su mutante horizontal inyectado        
+def crear_mutacion_horizontal(adn,posicion_inicial,base,cantidad): 
     
     inicio = posicion_inicial[1] - 1
     fin = cantidad + inicio
@@ -133,8 +143,8 @@ def crear_mutacion_horizontal(posicion_inicial,adn,base,cantidad):
             
     return adn
 
-     
-def crear_mutacion_vertical(posicion_inicial,adn,base,cantidad): 
+#esta funcion es para crear y devolver la matriz de adn con su mutante vertical inyectado       
+def crear_mutacion_vertical(adn,posicion_inicial,base,cantidad): 
     fila_inicio = posicion_inicial[0]-1
     columna = posicion_inicial[1]-1
     
@@ -145,25 +155,3 @@ def crear_mutacion_vertical(posicion_inicial,adn,base,cantidad):
         adn[i] = fila_elegida
     return adn   
         
-adn_ingresado = ["aaaaaa","aaaaaa","aaaaaa","aaaaaa","aaaaaa","aaaaaa"]
-
-orientacion = ingresar_orientacion_de_mutacion()
-base = ingresar_base_nitrogenada()
-if orientacion.lower() == "h": 
-    es_horizontal = True
-else :
-    es_horizontal = False 
-
-posicion=   ingresar_posicion_inicial(es_horizontal)
-
-cantidad = ingresar_cantidad(posicion,es_horizontal,base)
-
-
-if es_horizontal: 
-    adn_mutado = crear_mutacion_horizontal(posicion,adn_ingresado,base,cantidad)
-else: 
-    adn_mutado = crear_mutacion_vertical(posicion,adn_ingresado,base,cantidad)
-    
-    
-for i in adn_mutado: 
-    print(i)

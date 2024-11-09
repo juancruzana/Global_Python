@@ -1,4 +1,4 @@
-
+import time 
 #Funcion que recibe letra de base nitrogenada y devuelve la palabra
 def convertir_letra_a_palabra(letra): 
     letra = letra.lower()
@@ -14,25 +14,34 @@ def convertir_letra_a_palabra(letra):
     return letra
 
 #FUNCIONES PARA IMPRIMIR POR PANTALLA TIPO DE MUTACIÓN
-def mostrar_mutacion_horizontal(lista_horizontales):    
+def mostrar_mutacion_horizontal(lista_horizontales):
+        
 
-    
+    print("-------------MUTACIONES HORIZONTALES--------------")
     for posicion in lista_horizontales: 
-        print(f"Fila {posicion[0]+1}: Mutacón Horaizontal de {convertir_letra_a_palabra(posicion[1])}")
-
+        print(f"Fila {posicion[0]+1}: Mutacón de {convertir_letra_a_palabra(posicion[1])}")
+        time.sleep(0.8)
+    print("\n")
 def mostrar_mutacion_vertical(lista): 
+    
+    print("-------------MUTACIONES VERTICALES--------------")
     for poscicon in lista: 
-        print(f"Columna {poscicon[0]+1}: Mutación Vertical de {convertir_letra_a_palabra(poscicon[1])}") 
+        print(f"Columna {poscicon[0]+1}: Mutación de {convertir_letra_a_palabra(poscicon[1])}")
+        time.sleep(0.8) 
+        
+    print("\n")
 
 def mostrar_mutacion_diagonal(lista,contador):
     
-    print(f"Mutaciones Diagonales : {contador}")
+    print("------------MUTACIONES DIAGONALES--------------")
+    print(f"Mutaciones : {contador}")
     print("Bases Causantes del mutante: ")
     for i in lista: 
         base = convertir_letra_a_palabra(i)
         print(f"-{base}")
-     
-
+        time.sleep(0.8)
+    print("\n")
+    
 #funcion que verifica si hay mutacion diagonal    
 def verificar_diagonal(adn): 
     
@@ -48,7 +57,8 @@ def verificar_diagonal(adn):
                 bases_repetidas.add(adn[y][x])
                 contador +=1
                 
-    #Bucle que recorre de manera descendente de derecha a izquierda 
+    #Bucle que recorre de manera descendente de derecha a i
+    # zquierda 
     for y in range(len(adn)-3):
         
         for x in range(3,len(adn[y])):

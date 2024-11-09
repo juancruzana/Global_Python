@@ -1,8 +1,36 @@
 
+def Ingresar_opcion_1_or_2(): 
+
+    
+    while True: 
+        
+        try : 
+            opcion = int(input("Opcion : "))
+            if opcion == 1 or opcion == 2:  
+                break
+            else: 
+                print("Ingrese una Opción correcta(1/2). \n")
+        except: 
+            print("Valor Invalido.")
+            print("Porfavor Ingrese una opción correcta.(1/2)\n")
+            
+    return opcion      
+
+def ingresar_opcion_menu(): 
+  while True: 
+    try: 
+      opcion = int(input("Opcion: "))
+      if opcion < 1 or opcion > 4: 
+        print("Ingrese numero en el rango válido (1/4)")
+      else : 
+        return opcion
+    except: 
+      print("ERROR")
+      print("- Debe ingresar un número dentro del rango válido. ")
 #Funcion que muestra la lista de adn como una matriz en pantalla 
 def mostrar_matriz(lista_adn,id): 
     
-    print("- ADN : Matriz 6x6")
+    print("- ADN : Matriz 6x6 ")
     print(f"- ID : {id} ") 
     
     #Matriz rellena con números para luego remplazar los valores
@@ -18,6 +46,7 @@ def mostrar_matriz(lista_adn,id):
         for contador,caracter in enumerate(fila): 
             fila_modificada = fila_modificada.replace(str(contador),caracter.capitalize())
         print (f"  {fila_modificada}  ")
+    print("\n")
 
     
 def ingresar_id(): 
@@ -66,9 +95,12 @@ def ingresar_secuencia_adn():
     for fila in range(0,6):
         
         if lista_secuencia_adn:
+            print("\n-----------------")
             print("Secuencia ADN: ") 
             for i in lista_secuencia_adn: 
                 print(f"   {i}")
+            print("-----------------\n")
+          
         
         while True: 
             try: 
@@ -86,6 +118,7 @@ def ingresar_secuencia_adn():
                 print("-Cada fila debe contener una secuencia de 6 bases Nitrogeneda\n")
                 
     return lista_secuencia_adn
+
 
 def mostrar_menu():
   print(""" 
