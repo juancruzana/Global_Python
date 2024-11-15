@@ -1,8 +1,10 @@
+import random
+
 class Detector:
     def __init__(self, adn):
         self.adn = adn
 
-    def detectar_mutantes(self):
+    def detectar_mutante(self):
         mensajes = []  # Almacena mensaje según forma de mutación
         if self.detector_horizontal():
             mensajes.append('Tienes una mutación horizontal.')
@@ -13,8 +15,8 @@ class Detector:
         return mensajes != [], '\n'.join(mensajes) if mensajes else 'No hay mutaciones detectadas.'  
     
     def detector_vertical(self):
-        posicion = [] # Donde se guarda la posición inicial y final de la mutación
         for col in range(6):
+            posicion = [] # Donde se guarda la posición inicial y final de la mutación
             contador = 1  # Cuenta de caracteres consecutivos
             for fila in range(1, 6): 
                 # Compara el carácter actual con el anterior en la misma columna
@@ -41,11 +43,13 @@ class Detector:
                 if self.adn[fila][col] == self.adn[fila][col - 1]:  # Comparamos con el elemento anterior de la fila
                     contador += 1
 
+                    # Si contador se incrementa se guardará las posición inicial y final de la mutación
                     if contador == 2:
                         posicion.append([fila,col - 1])
                     if contador == 4:
                         posicion.append([fila,col])
-
+                        
+                    # Si hay 4 consecutivos iguales, retorna True
                     if contador == 4:  # Si hay 4 consecutivos iguales, retorna True
                         return True, posicion
                 else:
@@ -54,19 +58,25 @@ class Detector:
         return False
     
     def detector_diagonal(self):
+        posicion = [] # Donde se guarda la posición inicial y final de la mutación
+
         # Dimensiones del adn
         filas = len(self.adn)
         columnas = len(self.adn[0])
+
         # Verificar diagonales de izquierda a derecha
         for i in range(filas - 3):
             for j in range(columnas - 3):
                 if (self.adn[i][j] == self.adn[i+1][j+1] == self.adn[i+2][j+2] == self.adn[i+3][j+3]):
-                    return True
+                    posicion.extend([[i,j],[i+3,j+3]])
+                    return True, posicion
+                
         # Verificar diagonales de derecha a izquierda
         for i in range(filas - 3):
             for j in range(3, columnas):
                 if (self.adn[i][j] == self.adn[i+1][j-1] == self.adn[i+2][j-2] == self.adn[i+3][j-3]):
-                    return True
+                    posicion.extend([[i,j],[i+3,j-3]])
+                    return True, posicion
         return False
 
    
@@ -86,10 +96,11 @@ class Radiacion(Mutador):
         self.orientacion_de_la_mutacion = orientacion_de_la_mutacion.lower() # Forma en la q se mutará v,(vertica), h(horizontal), d (diagonal)
 
     def crear_mutante(self): 
-        if self.orientacion_de_la_mutacion == 'h': 
+        if self.orientacion_de_la_mutacion == 'h': # Mutación horizontal 
             self.adn[self.posicion_inicial] = (self.base_nitrogenada * 4) + (self.adn[self.posicion_inicial][4:]) # Agrega base nitrogenada en la posicion seleccionada
             return print(self.adn)
-        if self.orientacion_de_la_mutacion == 'v':
+        
+        if self.orientacion_de_la_mutacion == 'v': # Mutación vertical
             for x in range(4):
                 self.adn[x] = self.adn[x][:self.posicion_inicial] + self.base_nitrogenada + self.adn[x][self.posicion_inicial+1:] # Replaza fila por fila en la columna seleccionada
             return print(self.adn)
@@ -107,18 +118,52 @@ class Virus(Mutador):
                 self.adn[fila] = self.adn[fila][:col] + self.base_nitrogenada + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
                 fila += 1
                 col += 1
-            return [print(self.adn[x]) for x in range(len(self.adn))]
+            return [print(self.adn[x]) for x in range(len(self.adn))] # Imprime por pantalla adn mutado
         else: # Mutar de derecha a izquierda
             for i in range(4):
                 self.adn[fila] = self.adn[fila][:col] + self.base_nitrogenada + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
                 fila += 1
                 col -= 1
-            return [print(self.adn[x]) for x in range(len(self.adn))]
+            return [print(self.adn[x]) for x in range(len(self.adn))] # Imprime por pantalla adn mutado
 
 
-class Sanador(Detector): 
+class Sanador: 
     def __init__(self, adn):
-        super().__init__(adn)
+        self.adn = adn
+        self.detector = Detector(adn)  # Creamos una instancia de Detector
+        self.bases_nitrogenadas = ['T', 'A', 'G', 'C'] # Bases nitrogenadas posibles
     
     def sanar_mutantes(self): 
-        pass
+        objeto = self.detector  # Usamos la instancia para llamar a detectar_mutante
+        
+        if objeto.detector_horizontal():
+            print('TODAVIA NO FUNCIONA')
+            pass
+
+        if objeto.detector_vertical():
+            print('TODAVIA NO FUNCIONA')
+            pass
+
+        if objeto.detector_diagonal(): 
+            fila = objeto.detector_diagonal()[1][0][0]
+            col = objeto.detector_diagonal()[1][0][1]
+
+            if col < 3:
+                # Sanar de izquierda a derecha
+                for i in range(4): 
+                    self.adn[fila] = self.adn[fila][:col] + random.choice(self.bases_nitrogenadas) + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
+                    # self.adn[fila] = self.adn[fila][:col] + '5' + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
+                    fila += 1
+                    col += 1
+            else:
+                # Sanar de derecha a izquierda
+                for i in range(4): 
+                    # self.adn[fila] = self.adn[fila][:col] + '5' + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
+                    self.adn[fila] = self.adn[fila][:col] + random.choice(self.bases_nitrogenadas) + self.adn[fila][col+1:] # Agrega la mutación desde posición_inicial
+                    fila += 1
+                    col -= 1
+            [print(self.adn[x]) for x in range(len(self.adn))]
+            
+        
+        
+   
