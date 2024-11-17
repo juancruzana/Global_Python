@@ -15,25 +15,27 @@ class Detector:
         return mensajes != [], '\n'.join(mensajes) if mensajes else 'No hay mutaciones detectadas.'  
     
     def detector_vertical(self):
-        for col in range(6):
-            posicion = [] # Donde se guarda la posición inicial y final de la mutación
-            contador = 1  # Cuenta de caracteres consecutivos
-            for fila in range(1, 6): 
-                # Compara el carácter actual con el anterior en la misma columna
+        secuencias = []  # Para almacenar todas las secuencias detectadas
+        for col in range(len(self.adn[0])):  # Iterar por columnas
+            posicion_inicial = None
+            contador = 1  # Contador de coincidencias consecutivas
+
+            for fila in range(1, len(self.adn)):  # Iterar por filas
+                # Comparar el carácter actual con el anterior en la misma columna
                 if self.adn[fila][col] == self.adn[fila - 1][col]:
                     contador += 1
-                    # Si contador se incrementa se guardará las posición inicial y final de la mutación
-                    if contador == 2: # Posición inicial
-                        posicion.append([fila-1,col])
-                    if contador == 4: # Posición final
-                        posicion.append([fila,col])
-                    # Si hay 4 consecutivos iguales, retorna True
-                    if contador == 4:
-                        return True, posicion
+
+                    if contador == 2:  # Registrar posición inicial en la segunda coincidencia
+                        posicion_inicial = [fila - 1, col]
+
+                    if contador == 4:  # Detectar secuencia de 4
+                        posicion_final = [fila, col]
+                        secuencias.append([posicion_inicial, posicion_final])
                 else:
-                    contador = 1  # Reinicia el contador si no son iguales
-        # Si no encuentra secuencia de 4 consecutivos iguales en ninguna columna, retorna False
-        return False
+                    contador = 1  # Reiniciar el contador si no coinciden
+
+        # Retornar si se encontraron secuencias y la lista de secuencias
+        return bool(secuencias), secuencias
     
     def detector_horizontal(self):
         posicion = [] # Donde se guarda la posición inicial y final de la mutación
@@ -141,8 +143,13 @@ class Sanador:
             pass
 
         if objeto.detector_vertical():
-            print('TODAVIA NO FUNCIONA')
-            pass
+            self.adn = [list(row) for row in self.adn]  # Convertir cada fila a una lista para permitir modificaciones
+            _, secuencias = objeto.detector_vertical()  # Detectar secuencias
+            for inicio, fin in secuencias:
+                # Reemplazar en la matriz de ADN desde la posición inicial a la final
+                for fila in range(inicio[0], fin[0] + 1):
+                    self.adn[fila][inicio[1]] = random.choice(self.bases_nitrogenadas)
+            return [''.join(fila) for fila in self.adn]
 
         if objeto.detector_diagonal(): 
             fila = objeto.detector_diagonal()[1][0][0]
